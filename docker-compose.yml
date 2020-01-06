@@ -31,14 +31,6 @@ services:
             - php
         volumes:
             - ./logs/nginx:/var/log/nginx
-#            - ./symfony:/var/www/symfony
-    adminer:
-        container_name: adminer
-        image: adminer
-        ports:
-            - 8080:8080
-        networks:
-            - db
 networks:
     db:
     php:
