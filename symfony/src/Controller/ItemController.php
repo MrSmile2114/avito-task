@@ -5,14 +5,11 @@ namespace App\Controller;
 use App\Entity\Item;
 use App\Form\ItemType;
 use App\Repository\ItemRepository;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ItemController extends AbstractController
@@ -30,14 +27,19 @@ class ItemController extends AbstractController
      * @return JsonResponse
      */
     public function getItem(ItemRepository $repository, SerializerInterface $serializer, Request $request,
-                            int $item_id): JsonResponse
+                            $item_id): JsonResponse
     {
-        $item = $repository->find($item_id);
-        if (is_null($item_id)) {
+        if (is_null($item_id) or $item_id <= 0 or $item_id > PHP_INT_MAX) {
             return $this->json([
-                'status' => 'No item found with this id',
-                'item_id' => $item_id], 404);
+                'status' => 'Invalid id',
+                'item_id' => $item_id], 400);
         } else {
+            $item = $repository->find($item_id);
+            if (is_null($item)){
+                return $this->json([
+                    'status' => 'No item found with this id',
+                    'item_id' => $item_id], 404);
+            }
             $optionalFields = $request->get('fields', '');
             $itemData = [];
             foreach ($serializer->normalize($item) as $itemField => $itemFieldValue) {

@@ -78,7 +78,7 @@ class ItemTypeTest extends TypeTestCase
                 'imgLinks'      => 'http://example.com/123.png',
                 'price'         => 10000000 ],
             [   'name'          => 'testName12312123123123',
-                'description'   => 'testDescriptionfggffgggggggggggggggggggggggggfgfgfgfgfgfgfgfgfgffggf',
+                'description'   => str_repeat('testDescription12345',25),
                 'imgLinks'      => 'http://example.com/123.png,https://example.com/123.png,http://example.com/123.tif,http://example.com/123.tif,http://example.com/123.tif',
                 'price'         => 10000000 ],
             [   'name'          => 'testName',
