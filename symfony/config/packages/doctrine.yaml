@@ -9,13 +9,21 @@ doctrine:
             collate: utf8_unicode_ci
         url: '%env(resolve:DATABASE_URL)%'
     orm:
+        entity_managers:
+            default:
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                auto_mapping: true
+                mappings:
+                    App:
+                        is_bundle: false
+                        type: annotation
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity'
+                        alias: App
+                second_level_cache:
+                    enabled: true
+                    region_cache_driver:
+                        type: service
+                        id: snc_second_level_cache
+                    region_lifetime: 86400
         auto_generate_proxy_classes: true
-        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-        auto_mapping: true
-        mappings:
-            App:
-                is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App

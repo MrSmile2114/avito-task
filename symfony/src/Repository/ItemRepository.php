@@ -4,10 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Item;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
-use phpDocumentor\Reflection\Types\This;
 
 
 /**
@@ -39,6 +37,19 @@ class ItemRepository extends ServiceEntityRepository
         } catch (NoResultException $e) {
             return 0;
         }
+    }
+
+    public function findWithCache($id): ?Item
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.id = :val')
+            ->setParameter('val', $id)
+            ->getQuery()
+            ->useQueryCache(true)
+            ->setResultCacheId(__METHOD__)
+            ->setResultCacheLifetime(60)
+            ->getOneOrNullResult()
+        ;
     }
 
     // /**

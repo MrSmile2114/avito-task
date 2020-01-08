@@ -20,6 +20,7 @@ services:
         networks:
             - db
             - php
+            - redis
     nginx:
         container_name: nginx
         build: ./nginx
@@ -31,6 +32,20 @@ services:
             - php
         volumes:
             - ./logs/nginx:/var/log/nginx
+    redis:
+        container_name: redis
+        image: redis:alpine
+        ports:
+            - 6379:6379
+        networks:
+            - redis
+    adminer:
+        image: adminer:latest
+        ports:
+            - 8080:8080
+        networks:
+            - db
 networks:
     db:
     php:
+    redis:

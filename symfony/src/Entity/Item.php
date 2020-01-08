@@ -13,6 +13,7 @@ class Item
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="bigint")
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="item_region")
      */
     private $id;
 
