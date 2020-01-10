@@ -25,18 +25,13 @@ class ItemRepository extends ServiceEntityRepository
         parent::__construct($registry, Item::class);
     }
 
-    public function getMaxId(): int
+    public function getCount(): int
     {
-        try {
-            return $this->createQueryBuilder('i')
-                ->select('i.id')
-                ->orderBy('i.id', 'DESC')
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getSingleScalarResult();
-        } catch (NoResultException $e) {
-            return 0;
-        }
+        return $this->createQueryBuilder('i')
+            ->select('count(i.id)')
+            ->getQuery()
+            ->useQueryCache(true)
+            ->getSingleScalarResult();
     }
 
     public function findWithCache($id): ?Item
@@ -46,10 +41,32 @@ class ItemRepository extends ServiceEntityRepository
             ->setParameter('val', $id)
             ->getQuery()
             ->useQueryCache(true)
-            ->setResultCacheId(__METHOD__)
-            ->setResultCacheLifetime(60)
+            ->enableResultCache(60, 'Item_'.$id)
             ->getOneOrNullResult()
         ;
+    }
+
+    public function findWithCacheBy(array $criteriaArr = [], array $orderBy = [], int $limit = null, int $offset = null): array
+    {
+        $query = $this->createQueryBuilder('i');
+        foreach ($criteriaArr as $fieldName => $criteria){
+            $query->andWhere("i.$fieldName = :$fieldName")
+                ->setParameter("$fieldName", $criteria);
+        }
+        foreach ($orderBy as $fieldName => $ascDesc){
+            $query->addOrderBy("i.$fieldName", $ascDesc);
+        }
+        if (!is_null($offset)){
+            $query->setFirstResult($offset);
+        }
+
+        $query->setMaxResults($limit);
+//        $sql = $query->getDQL();
+        return $query->getQuery()
+            ->useQueryCache(true)
+            ->enableResultCache(60)
+//            ->enableResultCache(60, md5($sql))
+            ->getResult();
     }
 
     // /**

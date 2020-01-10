@@ -38,14 +38,14 @@ class ItemsController extends AbstractController
             $resultsOnPageNum = $this->defaultResultsOnPage;
         }
 
-        if (($pageNum - 1) * $resultsOnPageNum > $repository->getMaxId()){
+        if (($pageNum - 1) * $resultsOnPageNum > $repository->getCount()){
             $pageNum = 1;
         }
 
         $orderCriteria = $this->getOrderCriteria($orderBy);
 
         $nextPageExists = false;
-        $items = $repository->findBy([], $orderCriteria, $resultsOnPageNum + 1, ($pageNum - 1) * $resultsOnPageNum);
+        $items = $repository->findWithCacheBy([], $orderCriteria, $resultsOnPageNum + 1, ($pageNum - 1) * $resultsOnPageNum);
         if (array_key_exists($resultsOnPageNum, $items)) {
             unset($items[$resultsOnPageNum]);
             $nextPageExists = true;
