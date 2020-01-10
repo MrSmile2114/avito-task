@@ -34,7 +34,7 @@ class ItemController extends AbstractController
                 'status' => 'Invalid id',
                 'item_id' => $item_id], 400);
         } else {
-            $item = $repository->findWithCache($item_id);
+            $item = $repository->find($item_id);
             if (is_null($item)){
                 return $this->json([
                     'status' => 'No item found with this id',

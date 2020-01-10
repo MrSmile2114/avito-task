@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ItemRepository")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Item
 {
@@ -13,7 +14,6 @@ class Item
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="bigint")
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="item_region")
      */
     private $id;
 

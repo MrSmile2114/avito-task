@@ -25,15 +25,13 @@ class ItemRepository extends ServiceEntityRepository
         parent::__construct($registry, Item::class);
     }
 
-    public function getCount(): int
-    {
-        return $this->createQueryBuilder('i')
-            ->select('count(i.id)')
-            ->getQuery()
-            ->useQueryCache(true)
-            ->getSingleScalarResult();
-    }
-
+    /**
+     * Use this function if you want to avoid using a second level cache for some reason
+     *
+     * @param $id
+     * @return Item|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function findWithCache($id): ?Item
     {
         return $this->createQueryBuilder('i')
@@ -42,10 +40,18 @@ class ItemRepository extends ServiceEntityRepository
             ->getQuery()
             ->useQueryCache(true)
             ->enableResultCache(60, 'Item_'.$id)
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
 
+    /**
+     * Use this function if you want to avoid using a second level cache for some reason
+     *
+     * @param array $criteriaArr
+     * @param array $orderBy
+     * @param int|null $limit
+     * @param int|null $offset
+     * @return array
+     */
     public function findWithCacheBy(array $criteriaArr = [], array $orderBy = [], int $limit = null, int $offset = null): array
     {
         $query = $this->createQueryBuilder('i');
