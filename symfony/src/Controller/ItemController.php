@@ -26,25 +26,35 @@ class ItemController extends AbstractController
      * @param int $item_id
      * @return JsonResponse
      */
-    public function getItem(ItemRepository $repository, SerializerInterface $serializer, Request $request,
-                            $item_id): JsonResponse
+    public function getItem(
+        ItemRepository $repository,
+        SerializerInterface $serializer,
+        Request $request, $item_id
+    ): JsonResponse
     {
         if (is_null($item_id) or $item_id <= 0 or $item_id > PHP_INT_MAX) {
             return $this->json([
                 'status' => 'Invalid id',
-                'item_id' => $item_id], 400);
+                'item_id' => $item_id
+            ], 400);
         } else {
             $item = $repository->find($item_id);
             if (is_null($item)){
                 return $this->json([
                     'status' => 'No item found with this id',
-                    'item_id' => $item_id], 404);
+                    'item_id' => $item_id
+                ], 404);
             }
             $optionalFields = $request->get('fields', '');
             $itemData = [];
             foreach ($serializer->normalize($item) as $itemField => $itemFieldValue) {
-                if (in_array($itemField, $this->defaultResponseFields) or
-                    (in_array($itemField, $this->allowedOptResFields) and (strpos($optionalFields, $itemField) !== false))) {
+                if (
+                    in_array($itemField, $this->defaultResponseFields)
+                    or (
+                        in_array($itemField, $this->allowedOptResFields)
+                        and (strpos($optionalFields, $itemField) !== false)
+                    )
+                ) {
                     $itemData[$itemField] = $itemFieldValue;
                 }
             }
@@ -73,11 +83,13 @@ class ItemController extends AbstractController
             $em->clear();
             return $this->json([
                 'status' => 'Success',
-                'itemId' => $item->getId()]);
+                'itemId' => $item->getId()
+            ]);
         } else {
             return $this->json([
                 'status' => 'Validation error occurred',
-                'errors' => $this->getErrorsFromForm($form)], 400);
+                'errors' => $this->getErrorsFromForm($form)
+            ], 400);
         }
 
 

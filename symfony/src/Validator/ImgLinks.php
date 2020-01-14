@@ -18,7 +18,7 @@ class ImgLinks extends Constraint
 
     public $messageMinLinks = 'Too few photo links. Min {{ value }} is allowed.';
 
-    public $messageDelimiterInvalid = 'Invalid delimiter for links. Only "," is allowed. Space is not allowed!';
+    public $messageDelimiterInvalid = 'Invalid URL or delimiter for URLs. Only "," is allowed.';
 
     public $messageInvalidProtocol = 'Links must have a protocol at the beginning. (http://, https://)';
 

@@ -29,12 +29,12 @@ class ItemType extends AbstractType
                     new Length(['min' => 5, 'max' => 1000])
                 ]
             ])
-            ->add('imgLinks',TextType::class , [
+            ->add('imgLinks', TextType::class, [
                 'constraints' => [
                     new NotBlank(),
                     new ImgLinks([
-                        'min'=>1,
-                        'max'=>3])
+                        'min' => 1,
+                        'max' => 3])
                 ]
             ])
             ->add('price', IntegerType::class, [

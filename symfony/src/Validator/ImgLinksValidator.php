@@ -31,8 +31,10 @@ class ImgLinksValidator extends ConstraintValidator
         //Delimiter check
         if (!strpos($value, ',')) {
             $violations = $validator->validate($value, [new NotBlank(), new Url()]);
-            if ((isset($violations) and 0 !== count($violations))
-                or (substr_count($value, 'https://') > 1 or substr_count($value, 'http://') > 1)) {
+            if (
+                (0 !== count($violations))  //necessary, otherwise accepts multiple links without delimiter:
+                or (substr_count($value, 'https://') + substr_count($value, 'http://') > 1)
+            ) {
                 $this->context->buildViolation($constraint->messageDelimiterInvalid)->addViolation();
                 return;
             }
@@ -43,12 +45,14 @@ class ImgLinksValidator extends ConstraintValidator
         if (count($arrayLinks) > $linksMax) {
             $this->context->buildViolation($constraint->messageMaxLinks)
                 ->setParameter('{{ value }}', $linksMax)
-                ->addViolation();
+                ->addViolation()
+            ;
         }
         if (count($arrayLinks) < $linksMin) {
             $this->context->buildViolation($constraint->messageMinLinks)
                 ->setParameter('{{ value }}', $linksMax)
-                ->addViolation();
+                ->addViolation()
+            ;
         }
 
         //check links:

@@ -52,17 +52,23 @@ class ItemRepository extends ServiceEntityRepository
      * @param int|null $offset
      * @return array
      */
-    public function findWithCacheBy(array $criteriaArr = [], array $orderBy = [], int $limit = null, int $offset = null): array
+    public function findWithCacheBy(
+        array $criteriaArr = [],
+        array $orderBy = [],
+        int $limit = null,
+        int $offset = null
+    ): array
     {
         $query = $this->createQueryBuilder('i');
-        foreach ($criteriaArr as $fieldName => $criteria){
-            $query->andWhere("i.$fieldName = :$fieldName")
+        foreach ($criteriaArr as $fieldName => $criteria) {
+            $query
+                ->andWhere("i.$fieldName = :$fieldName")
                 ->setParameter("$fieldName", $criteria);
         }
-        foreach ($orderBy as $fieldName => $ascDesc){
+        foreach ($orderBy as $fieldName => $ascDesc) {
             $query->addOrderBy("i.$fieldName", $ascDesc);
         }
-        if (!is_null($offset)){
+        if (!is_null($offset)) {
             $query->setFirstResult($offset);
         }
 

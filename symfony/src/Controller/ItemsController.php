@@ -38,14 +38,19 @@ class ItemsController extends AbstractController
             $resultsOnPageNum = $this->defaultResultsOnPage;
         }
 
-        if (($pageNum - 1) * $resultsOnPageNum > $repository->count([])){
+        if (($pageNum - 1) * $resultsOnPageNum > $repository->count([])) {
             $pageNum = 1;
         }
 
         $orderCriteria = $this->getOrderCriteria($orderBy);
 
         $nextPageExists = false;
-        $items = $repository->findBy([], $orderCriteria, $resultsOnPageNum + 1, ($pageNum - 1) * $resultsOnPageNum);
+        $items = $repository->findBy(
+            [],
+            $orderCriteria,
+            $resultsOnPageNum + 1,
+            ($pageNum - 1) * $resultsOnPageNum
+        );
         if (array_key_exists($resultsOnPageNum, $items)) {
             unset($items[$resultsOnPageNum]);
             $nextPageExists = true;
@@ -61,10 +66,10 @@ class ItemsController extends AbstractController
         }
 
         return $this->json([
-            'status' =>         'Success',
-            'currentPage' =>    $pageNum,
+            'status' => 'Success',
+            'currentPage' => $pageNum,
             'nextPageExists' => $nextPageExists,
-            'items' =>          $itemsData,
+            'items' => $itemsData,
         ]);
 
     }
@@ -75,21 +80,14 @@ class ItemsController extends AbstractController
         $orderBy = str_replace(['asc_', 'asc(', 'ASC_', 'ASC('], '+', $orderBy);
         $orderBy = str_replace(['desc_', 'desc(', 'DESC_', 'DESC('], '-', $orderBy);
         while ((strpos($orderBy, '+') !== false) or (strpos($orderBy, '-') !== false)) {
-            $pos = strpos($orderBy, '+');
+            $posA = strpos($orderBy, '+');
             $posD = strpos($orderBy, '-');
-            if ($posD < $pos) {
-                $pos = $posD;
-            }
+            $pos = ($posD < $posA) ? $posD : $posA;
             $ascDesc = substr($orderBy, $pos, 1);
             $orderBy = substr($orderBy, $pos + 1);
             foreach ($this->orderlyFields as $field) {
                 if (substr($orderBy, 0, strlen($field)) == $field) {
-                    if ($ascDesc == '+') {
-                        $orderCriteria[$field] = 'asc';
-                    } else {
-                        $orderCriteria[$field] = 'desc';
-                    }
-
+                    $orderCriteria[$field] = ($ascDesc === '+') ? 'asc' : 'desc';
                 }
             }
         }
