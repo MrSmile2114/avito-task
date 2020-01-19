@@ -20,15 +20,13 @@ class ImgLinks extends Constraint
 
     public $messageDelimiterInvalid = 'Invalid URL or delimiter for URLs. Only "," is allowed.';
 
-    public $messageInvalidProtocol = 'Links must have a protocol at the beginning. (http://, https://)';
-
     /**
-     * @var integer
+     * @var int
      */
     public $max;
 
     /**
-     * @var integer
+     * @var int
      */
     public $min;
 
