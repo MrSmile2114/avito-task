@@ -36,6 +36,7 @@ class ImgLinksValidator extends ConstraintValidator
                 or (substr_count($value, 'https://') + substr_count($value, 'http://') > 1)
             ) {
                 $this->context->buildViolation($constraint->messageDelimiterInvalid)->addViolation();
+
                 return;
             }
         }
@@ -45,14 +46,12 @@ class ImgLinksValidator extends ConstraintValidator
         if (count($arrayLinks) > $linksMax) {
             $this->context->buildViolation($constraint->messageMaxLinks)
                 ->setParameter('{{ value }}', $linksMax)
-                ->addViolation()
-            ;
+                ->addViolation();
         }
         if (count($arrayLinks) < $linksMin) {
             $this->context->buildViolation($constraint->messageMinLinks)
                 ->setParameter('{{ value }}', $linksMax)
-                ->addViolation()
-            ;
+                ->addViolation();
         }
 
         //check links:
@@ -62,8 +61,8 @@ class ImgLinksValidator extends ConstraintValidator
                 $this->context->addViolation($violation);
             }
         }
-        return;
 
+        return;
     }
 
 }

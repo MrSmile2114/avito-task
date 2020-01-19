@@ -34,10 +34,10 @@ class ItemTypeTest extends TypeTestCase
     public function testSubmitValidData($name, $description, $imgLinks, $price)
     {
         $formData = [
-            'name'          => $name,
-            'description'   => $description,
-            'imgLinks'      => $imgLinks,
-            'price'         => $price
+            'name' => $name,
+            'description' => $description,
+            'imgLinks' => $imgLinks,
+            'price' => $price,
         ];
 
         $objectToCompare = new Item();
@@ -67,24 +67,33 @@ class ItemTypeTest extends TypeTestCase
         }
     }
 
-    public function getValidData(){
+    public function getValidData()
+    {
         return [
-            [   'name'          => 'testName',
-                'description'   => 'testDescription',
-                'imgLinks'      => 'http://example.com/123.png,https://example.com/123.png,http://example.com/123.tif',
-                'price'         => 10000000 ],
-            [   'name'          => '321testName123312',
-                'description'   => 'testDescriptionErndfgdgdg',
-                'imgLinks'      => 'http://example.com/123.png',
-                'price'         => 10000000 ],
-            [   'name'          => 'testName12312123123123',
-                'description'   => str_repeat('testDescription12345',25),
-                'imgLinks'      => 'http://example.com/123.png,https://example.com/123.png,http://example.com/123.tif,http://example.com/123.tif,http://example.com/123.tif',
-                'price'         => 10000000 ],
-            [   'name'          => 'testName',
-                'description'   => 'testDescription',
-                'imgLinks'      => 'http://example.com/123.png,https://example.com/123.png,http://example.com/123.tif',
-                'price'         => 10000000000 ],
+            [
+                'name' => 'testName',
+                'description' => 'testDescription',
+                'imgLinks' => 'http://example.com/123.png,https://example.com/123.png,http://example.com/123.tif',
+                'price' => 10000000,
+            ],
+            [
+                'name' => '321testName123312',
+                'description' => 'testDescriptionErndfgdgdg',
+                'imgLinks' => 'http://example.com/123.png',
+                'price' => 10000000,
+            ],
+            [
+                'name' => 'testName12312123123123',
+                'description' => str_repeat('testDescription12345', 25),
+                'imgLinks' => 'http://example.com/123.png,https://example.com/123.png,http://example.com/123.tif,http://example.com/123.tif,http://example.com/123.tif',
+                'price' => 10000000,
+            ],
+            [
+                'name' => 'testName',
+                'description' => 'testDescription',
+                'imgLinks' => 'http://example.com/123.png,https://example.com/123.png,http://example.com/123.tif',
+                'price' => 10000000000,
+            ],
         ];
     }
 }

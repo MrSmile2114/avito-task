@@ -18,31 +18,51 @@ class ItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, [
-                'constraints' => [
-                    new NotBlank(),
-                    new Length(['min' => 5, 'max' => 200])]
-            ])
-            ->add('description', TextType::class, [
-                'constraints' => [
-                    new NotBlank(),
-                    new Length(['min' => 5, 'max' => 1000])
+            ->add(
+                'name',
+                TextType::class,
+                [
+                    'constraints' => [
+                        new NotBlank(),
+                        new Length(['min' => 5, 'max' => 200]),
+                    ],
                 ]
-            ])
-            ->add('imgLinks', TextType::class, [
-                'constraints' => [
-                    new NotBlank(),
-                    new ImgLinks([
-                        'min' => 1,
-                        'max' => 3])
+            )
+            ->add(
+                'description',
+                TextType::class,
+                [
+                    'constraints' => [
+                        new NotBlank(),
+                        new Length(['min' => 5, 'max' => 1000]),
+                    ],
                 ]
-            ])
-            ->add('price', IntegerType::class, [
-                'constraints' => [
-                    new NotBlank(),
-                    new Length(['max' => 12])
+            )
+            ->add(
+                'imgLinks',
+                TextType::class,
+                [
+                    'constraints' => [
+                        new NotBlank(),
+                        new ImgLinks(
+                            [
+                                'min' => 1,
+                                'max' => 3,
+                            ]
+                        ),
+                    ],
                 ]
-            ]);
+            )
+            ->add(
+                'price',
+                IntegerType::class,
+                [
+                    'constraints' => [
+                        new NotBlank(),
+                        new Length(['max' => 12]),
+                    ],
+                ]
+            );
 
         //Custom transformer:
 //        $builder->get('imgLinks')
@@ -59,8 +79,10 @@ class ItemType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => Item::class,
-        ]);
+        $resolver->setDefaults(
+            [
+                'data_class' => Item::class,
+            ]
+        );
     }
 }

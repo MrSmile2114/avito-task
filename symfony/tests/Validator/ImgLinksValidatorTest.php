@@ -70,7 +70,7 @@ class ImgLinksValidatorTest extends ConstraintValidatorTestCase
             ['https://example.com/fggff/fggf/123.png'],
             ['http://example.com/123.tif,http://example.com/123.png'],
             ['http://example.com/123.png,http://example.com/123.tif'],
-            ['http://example.com/123.png']
+            ['http://example.com/123.png'],
         ];
     }
 
@@ -102,7 +102,7 @@ class ImgLinksValidatorTest extends ConstraintValidatorTestCase
             ['http://exam,ple.com/123.tif,http://examp,le.com/123.png', 2],
             ['http://example.com/123.png.http://example.com/123.tif.http://example.com/123.tif', 1],
             ['htp:://example.com/123.png,htp://example.com/123.png,tp://example.com/123.tif', 3],
-            ['http://example.com/123.png, https://example.com/123.png, http://example.com/123.tif', 2]
+            ['http://example.com/123.png, https://example.com/123.png, http://example.com/123.tif', 2],
         ];
     }
 
@@ -123,7 +123,12 @@ class ImgLinksValidatorTest extends ConstraintValidatorTestCase
     {
         return [
             ['http://example.com/123.png', 1, 3, 0],
-            ['http://example.com/123.png,http://example.com/123.png,http://example.com/123.png,http://example.com/123.png', 1, 3, 1],
+            [
+                'http://example.com/123.png,http://example.com/123.png,http://example.com/123.png,http://example.com/123.png',
+                1,
+                3,
+                1,
+            ],
             ['http://example.com/123.png', 2, 3, 1],
             ['http://example.com/123.png', 0, 3, 0],
         ];

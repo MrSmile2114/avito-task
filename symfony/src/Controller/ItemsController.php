@@ -65,13 +65,14 @@ class ItemsController extends AbstractController
             }
         }
 
-        return $this->json([
-            'status' => 'Success',
-            'currentPage' => $pageNum,
-            'nextPageExists' => $nextPageExists,
-            'items' => $itemsData,
-        ]);
-
+        return $this->json(
+            [
+                'status' => 'Success',
+                'currentPage' => $pageNum,
+                'nextPageExists' => $nextPageExists,
+                'items' => $itemsData,
+            ]
+        );
     }
 
     public function getOrderCriteria(string $orderBy): array
@@ -91,6 +92,7 @@ class ItemsController extends AbstractController
                 }
             }
         }
+
         return $orderCriteria;
     }
 }

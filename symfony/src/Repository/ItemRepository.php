@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Item;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -30,7 +31,7 @@ class ItemRepository extends ServiceEntityRepository
      *
      * @param $id
      * @return Item|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function findWithCache($id): ?Item
     {
@@ -39,7 +40,7 @@ class ItemRepository extends ServiceEntityRepository
             ->setParameter('val', $id)
             ->getQuery()
             ->useQueryCache(true)
-            ->enableResultCache(60, 'Item_'.$id)
+            ->enableResultCache(60, "Item_$id")
             ->getOneOrNullResult();
     }
 
@@ -57,8 +58,7 @@ class ItemRepository extends ServiceEntityRepository
         array $orderBy = [],
         int $limit = null,
         int $offset = null
-    ): array
-    {
+    ): array {
         $query = $this->createQueryBuilder('i');
         foreach ($criteriaArr as $fieldName => $criteria) {
             $query
@@ -73,6 +73,7 @@ class ItemRepository extends ServiceEntityRepository
         }
 
         $query->setMaxResults($limit);
+
 //        $sql = $query->getDQL();
         return $query->getQuery()
             ->useQueryCache(true)
