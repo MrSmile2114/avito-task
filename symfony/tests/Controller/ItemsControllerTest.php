@@ -22,7 +22,7 @@ class ItemsControllerTest extends WebTestCase
     {
         return [
             [
-                'asc_name, desc_price, ASC(id), +created',
+                'asc_name, desc_price, ASC(id), ASC_created',
                 [
                     'name' => 'asc',
                     'price' => 'desc',
@@ -31,7 +31,7 @@ class ItemsControllerTest extends WebTestCase
                 ],
             ],
             [
-                'asc_name,desc_price,DESC(id),+created',
+                'asc_name,desc_price,DESC(id),asc_created',
                 [
                     'name' => 'asc',
                     'price' => 'desc',
@@ -40,7 +40,7 @@ class ItemsControllerTest extends WebTestCase
                 ],
             ],
             [
-                'asc_name, desc_prrrice, ASC(id), +created',
+                'asc_name, desc_prrrice, ASC(id), asc_created',
                 [
                     'name' => 'asc',
                     'id' => 'asc',
@@ -48,16 +48,7 @@ class ItemsControllerTest extends WebTestCase
                 ],
             ],
             [
-                'asc_namedesc_priceASC(id)+created',
-                [
-                    'name' => 'asc',
-                    'price' => 'desc',
-                    'id' => 'asc',
-                    'created' => 'asc',
-                ],
-            ],
-            [
-                '+name-price+id+created',
+                'asc_namedesc_priceASC(id)asc_created',
                 [
                     'name' => 'asc',
                     'price' => 'desc',
@@ -66,7 +57,16 @@ class ItemsControllerTest extends WebTestCase
                 ],
             ],
             [
-                'DESC(name)DESC(price)ASC(id), +created',
+                'asc_name,asc(price),asc_id asc_created',
+                [
+                    'name' => 'asc',
+                    'price' => 'asc',
+                    'id' => 'asc',
+                    'created' => 'asc',
+                ],
+            ],
+            [
+                'DESC(name)DESC(price)ASC(id), asc_created',
                 [
                     'name' => 'desc',
                     'price' => 'desc',
@@ -75,19 +75,26 @@ class ItemsControllerTest extends WebTestCase
                 ],
             ],
             [
-                'asc_nafme, desc_price, ASC(id), +created',
+                'asc_nafme, desc_price, ASC(id), asc__created',
                 [
+                    'price' => 'desc',
+                    'id' => 'asc',
+                ],
+            ],
+            [
+                'dfgdfDdsasc_nameghdesc_fggfdesc_price, ASC(id), asc_created',
+                [
+                    'name' => 'asc',
                     'price' => 'desc',
                     'id' => 'asc',
                     'created' => 'asc',
                 ],
             ],
             [
-                'dfgdfDdsasc_nameghdesc_fggfdesc_price, ASC(id), +created',
+                'asc_id, asc_price, asc_created',
                 [
-                    'name' => 'asc',
-                    'price' => 'desc',
                     'id' => 'asc',
+                    'price' => 'asc',
                     'created' => 'asc',
                 ],
             ],

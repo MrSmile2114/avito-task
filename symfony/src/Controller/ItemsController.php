@@ -25,7 +25,7 @@ class ItemsController extends AbstractController
      * @param SerializerInterface $serializer
      * @return JsonResponse
      */
-    public function index(Request $request, ItemRepository $repository, SerializerInterface $serializer)
+    public function index(Request $request, ItemRepository $repository, SerializerInterface $serializer): JsonResponse
     {
         $pageNum = $request->get('page', 1);
         $resultsOnPageNum = $request->get('resultsOnPage', $this->defaultResultsOnPage);
@@ -70,6 +70,7 @@ class ItemsController extends AbstractController
                 'status' => 'Success',
                 'currentPage' => $pageNum,
                 'nextPageExists' => $nextPageExists,
+                'itemsCount' => count($itemsData),
                 'items' => $itemsData,
             ]
         );
@@ -83,7 +84,9 @@ class ItemsController extends AbstractController
         while ((strpos($orderBy, '+') !== false) or (strpos($orderBy, '-') !== false)) {
             $posA = strpos($orderBy, '+');
             $posD = strpos($orderBy, '-');
-            $pos = ($posD < $posA) ? $posD : $posA;
+            $pos = (($posA !== false) and ($posD !== false))
+                ? (($posD < $posA) ? $posD : $posA)
+                : (($posD !== false) ? $posD : $posA);
             $ascDesc = substr($orderBy, $pos, 1);
             $orderBy = substr($orderBy, $pos + 1);
             foreach ($this->orderlyFields as $field) {
