@@ -1,4 +1,7 @@
 preset: symfony
+disabled:
+  - braces
+  - property_separation
 finder:
   exclude:
     - "nginx"
@@ -6,3 +9,5 @@ finder:
   name: "*.php"
   path:
     - "symfony/src"
+  not-path:
+    - "Migrations"
