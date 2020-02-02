@@ -1,0 +1,8 @@
+preset: symfony
+finder:
+  exclude:
+    - "nginx"
+    - "php7-fpm"
+  name: "*.php"
+  path:
+    - "symfony/src"
