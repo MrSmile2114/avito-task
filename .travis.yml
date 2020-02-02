@@ -17,6 +17,7 @@ before_install:
 install:
   - docker-compose up -d
   - docker exec php-fpm  composer install
+  - docker exec php-fpm  php bin/console --no-interaction doctrine:migrations:migrate
 
 script:
   - docker exec php-fpm  php bin/phpunit
