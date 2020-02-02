@@ -12,6 +12,6 @@ class DefaultController extends AbstractController
      */
     public function index()
     {
-        return $this->redirect("/doc/");
+        return $this->redirect('/doc/');
     }
 }

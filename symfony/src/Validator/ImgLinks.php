@@ -33,14 +33,14 @@ class ImgLinks extends Constraint
     public function __construct($options = null)
     {
         //custom options:
-        if (is_null($options) or !key_exists('min', $options) or is_null($options['min'])) {
+        if (is_null($options) or !array_key_exists('min', $options) or is_null($options['min'])) {
             $this->min = 1;
         } elseif (is_int($options['min']) and $options['min'] >= 0) {
             $this->min = $options['min'];
         } else {
             throw new InvalidOptionsException('Option min is invalid', $options);
         }
-        if (is_null($options) or !key_exists('max', $options) or is_null($options['max'])) {
+        if (is_null($options) or !array_key_exists('max', $options) or is_null($options['max'])) {
             $this->max = 10;
         } elseif (is_int($options['max']) and $options['max'] > 0) {
             $this->max = $options['max'];
@@ -50,5 +50,4 @@ class ImgLinks extends Constraint
 
         parent::__construct($options);
     }
-
 }

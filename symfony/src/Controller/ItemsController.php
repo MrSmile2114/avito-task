@@ -20,9 +20,11 @@ class ItemsController extends AbstractController
 
     /**
      * @Route("/items", name="items", methods={"GET"})
-     * @param Request $request
-     * @param ItemRepository $repository
+     *
+     * @param Request             $request
+     * @param ItemRepository      $repository
      * @param SerializerInterface $serializer
+     *
      * @return JsonResponse
      */
     public function index(Request $request, ItemRepository $repository, SerializerInterface $serializer): JsonResponse
@@ -81,17 +83,17 @@ class ItemsController extends AbstractController
         $orderCriteria = [];
         $orderBy = str_replace(['asc_', 'asc(', 'ASC_', 'ASC('], '+', $orderBy);
         $orderBy = str_replace(['desc_', 'desc(', 'DESC_', 'DESC('], '-', $orderBy);
-        while ((strpos($orderBy, '+') !== false) or (strpos($orderBy, '-') !== false)) {
+        while ((false !== strpos($orderBy, '+')) or (false !== strpos($orderBy, '-'))) {
             $posA = strpos($orderBy, '+');
             $posD = strpos($orderBy, '-');
-            $pos = (($posA !== false) and ($posD !== false))
+            $pos = ((false !== $posA) and (false !== $posD))
                 ? (($posD < $posA) ? $posD : $posA)
-                : (($posD !== false) ? $posD : $posA);
+                : ((false !== $posD) ? $posD : $posA);
             $ascDesc = substr($orderBy, $pos, 1);
             $orderBy = substr($orderBy, $pos + 1);
             foreach ($this->orderlyFields as $field) {
                 if (substr($orderBy, 0, strlen($field)) == $field) {
-                    $orderCriteria[$field] = ($ascDesc === '+') ? 'asc' : 'desc';
+                    $orderCriteria[$field] = ('+' === $ascDesc) ? 'asc' : 'desc';
                 }
             }
         }

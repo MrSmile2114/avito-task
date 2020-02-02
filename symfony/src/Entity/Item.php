@@ -28,7 +28,6 @@ class Item
     private $description;
 
     /**
-     *
      * @ORM\Column(type="text")
      */
     private $imgLinks;
