@@ -34,7 +34,7 @@ class ItemsController extends AbstractController
         if (!is_numeric($pageNum) or $pageNum <= 0) {
             $pageNum = 1;
         }
-        if (!is_numeric($resultsOnPageNum) or $resultsOnPageNum <= 0 or $resultsOnPageNum >= $this->maxResultsOnPage) {
+        if (!is_numeric($resultsOnPageNum) or $resultsOnPageNum <= 0 or $resultsOnPageNum > $this->maxResultsOnPage) {
             $resultsOnPageNum = $this->defaultResultsOnPage;
         }
 
@@ -94,6 +94,10 @@ class ItemsController extends AbstractController
                     $orderCriteria[$field] = ($ascDesc === '+') ? 'asc' : 'desc';
                 }
             }
+        }
+
+        if (empty($orderCriteria) and ($orderBy !== $this->defaultOrder)) {
+            $orderCriteria = $this->getOrderCriteria($this->defaultOrder);
         }
 
         return $orderCriteria;
