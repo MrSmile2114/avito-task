@@ -3,6 +3,8 @@ language: php
 services:
   - docker
 
+sudo: required
+
 env:
   - DOCKER_COMPOSE_VERSION=1.24.1
 
@@ -21,4 +23,3 @@ script:
 
 after_script:
   - docker-compose stop
-  - docker-compose rm -f
