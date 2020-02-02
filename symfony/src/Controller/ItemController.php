@@ -20,10 +20,12 @@ class ItemController extends AbstractController
 
     /**
      * @Route("/item/{item_id}", name="item", requirements={"item_id": "\d+"})
-     * @param ItemRepository $repository
+     *
+     * @param ItemRepository      $repository
      * @param SerializerInterface $serializer
-     * @param Request $request
-     * @param int $item_id
+     * @param Request             $request
+     * @param int                 $item_id
+     *
      * @return JsonResponse
      */
     public function getItem(
@@ -58,7 +60,7 @@ class ItemController extends AbstractController
                     in_array($itemField, $this->defaultResponseFields)
                     or (
                         in_array($itemField, $this->allowedOptResFields)
-                        and (strpos($optionalFields, $itemField) !== false)
+                        and (false !== strpos($optionalFields, $itemField))
                     )
                 ) {
                     $itemData[$itemField] = $itemFieldValue;
@@ -76,6 +78,7 @@ class ItemController extends AbstractController
 
     /**
      * @Route("/item/create", name="item_create", methods={"POST"})
+     *
      * @param Request $request
      *
      * @return JsonResponse

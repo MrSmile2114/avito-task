@@ -5,9 +5,7 @@ namespace App\Repository;
 use App\Entity\Item;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
-
 
 /**
  * @method Item|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,6 +17,7 @@ class ItemRepository extends ServiceEntityRepository
 {
     /**
      * ItemRepository constructor.
+     *
      * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
@@ -27,10 +26,12 @@ class ItemRepository extends ServiceEntityRepository
     }
 
     /**
-     * Use this function if you want to avoid using a second level cache for some reason
+     * Use this function if you want to avoid using a second level cache for some reason.
      *
      * @param $id
+     *
      * @return Item|null
+     *
      * @throws NonUniqueResultException
      */
     public function findWithCache($id): ?Item
@@ -45,12 +46,13 @@ class ItemRepository extends ServiceEntityRepository
     }
 
     /**
-     * Use this function if you want to avoid using a second level cache for some reason
+     * Use this function if you want to avoid using a second level cache for some reason.
      *
-     * @param array $criteriaArr
-     * @param array $orderBy
+     * @param array    $criteriaArr
+     * @param array    $orderBy
      * @param int|null $limit
      * @param int|null $offset
+     *
      * @return array
      */
     public function findWithCacheBy(

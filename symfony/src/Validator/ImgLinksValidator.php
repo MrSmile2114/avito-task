@@ -64,5 +64,4 @@ class ImgLinksValidator extends ConstraintValidator
 
         return;
     }
-
 }
