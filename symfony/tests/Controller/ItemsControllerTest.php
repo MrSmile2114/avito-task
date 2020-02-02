@@ -111,6 +111,9 @@ class ItemsControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/items?page='.$page.'&resultsOnPage='.$resultsOnPage);
         $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        if (500 === $client->getResponse()->getStatusCode()){
+            echo "RESPONSE: \n".$client->getResponse()->getContent()."\n";
+        }
     }
 
     public function getTestData()

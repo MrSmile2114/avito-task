@@ -18,6 +18,9 @@ class ItemControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/item/'.$itemId);
         $this->assertEquals($code, $client->getResponse()->getStatusCode());
+        if (500 === $client->getResponse()->getStatusCode()){
+            echo "RESPONSE: \n".$client->getResponse()->getContent()."\n";
+        }
     }
 
     public function getInvalidItemId()
