@@ -14,7 +14,6 @@ class EntityItemService extends AbstractEntityService implements ItemServiceInte
     private const DEFAULT_ORDER = '-created';
     private const ORDERLY_FIELDS = ['name', 'price', 'id', 'created'];
 
-
     public function __construct(EntityManagerInterface $entityManager, SerializerInterface $serializer)
     {
         parent::__construct($entityManager, $entityManager->getRepository(Item::class), $serializer);
