@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Service\EntityServices;
-
 
 use App\Entity\Item;
 use Doctrine\ORM\EntityManagerInterface;

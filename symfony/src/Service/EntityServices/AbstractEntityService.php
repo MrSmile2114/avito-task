@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Service\EntityServices;
-
 
 use Doctrine\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
