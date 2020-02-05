@@ -4,33 +4,26 @@ namespace App\Controller;
 
 use App\Entity\Item;
 use App\Form\ItemType;
-use App\Repository\ItemRepository;
+use App\Service\EntityServices\ItemServiceInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class ItemController extends AbstractController
 {
-    private $allowedOptResFields = ['description', 'imgLinks', 'created', 'imgLinksArr'];
-
-    private $defaultResponseFields = ['name', 'price', 'mainImgLink', 'id'];
-
     /**
      * @Route("/item/{item_id}", name="item", requirements={"item_id": "\d+"})
      *
-     * @param ItemRepository      $repository
-     * @param SerializerInterface $serializer
-     * @param Request             $request
-     * @param int                 $item_id
+     * @param ItemServiceInterface $itemService
+     * @param Request              $request
+     * @param int                  $item_id
      *
      * @return JsonResponse
      */
     public function getItem(
-        ItemRepository $repository,
-        SerializerInterface $serializer,
+        ItemServiceInterface $itemService,
         Request $request,
         $item_id
     ): JsonResponse {
@@ -43,8 +36,10 @@ class ItemController extends AbstractController
                 400
             );
         } else {
-            $item = $repository->find($item_id);
-            if (is_null($item)) {
+            $optionalFields = $request->get('fields', '');
+            $itemData = $itemService->getItemData($item_id, $optionalFields);
+
+            if (is_null($itemData)) {
                 return $this->json(
                     [
                         'status' => 'No item found with this id',
@@ -52,27 +47,14 @@ class ItemController extends AbstractController
                     ],
                     404
                 );
+            } else {
+                return $this->json(
+                    [
+                        'status' => 'Success',
+                        'item' => $itemData,
+                    ]
+                );
             }
-            $optionalFields = $request->get('fields', '');
-            $itemData = [];
-            foreach ($serializer->normalize($item) as $itemField => $itemFieldValue) {
-                if (
-                    in_array($itemField, $this->defaultResponseFields)
-                    or (
-                        in_array($itemField, $this->allowedOptResFields)
-                        and (false !== strpos($optionalFields, $itemField))
-                    )
-                ) {
-                    $itemData[$itemField] = $itemFieldValue;
-                }
-            }
-
-            return $this->json(
-                [
-                    'status' => 'Success',
-                    'item' => $itemData,
-                ]
-            );
         }
     }
 

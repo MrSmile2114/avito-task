@@ -2,70 +2,48 @@
 
 namespace App\Controller;
 
-use App\Repository\ItemRepository;
+use App\Service\EntityServices\ItemServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class ItemsController extends AbstractController
 {
-    private $defaultResultsOnPage = 10;
-    private $maxResultsOnPage = 100000;
-    private $defaultOrder = '-created';
-
-    private $responseFields = ['name', 'price', 'mainImgLink'];
-    private $orderlyFields = ['name', 'price', 'id', 'created'];
+    private const DEFAULT_RES_ON_PAGE = 10;
+    private const MAX_RES_ON_PAGE = 100000;
 
     /**
      * @Route("/items", name="items", methods={"GET"})
      *
-     * @param Request             $request
-     * @param ItemRepository      $repository
-     * @param SerializerInterface $serializer
+     * @param Request              $request
+     * @param ItemServiceInterface $itemService
      *
      * @return JsonResponse
      */
-    public function index(Request $request, ItemRepository $repository, SerializerInterface $serializer): JsonResponse
-    {
+    public function index(
+        Request $request,
+        ItemServiceInterface $itemService
+    ): JsonResponse {
         $pageNum = $request->get('page', 1);
-        $resultsOnPageNum = $request->get('resultsOnPage', $this->defaultResultsOnPage);
-        $orderBy = $request->get('orderBy', $this->defaultOrder);
+        $resultsOnPageNum = $request->get('resultsOnPage', self::DEFAULT_RES_ON_PAGE);
+        $orderBy = $request->get('orderBy', '');
+        $optionalFields = $request->get('fields', '');
 
         if (!is_numeric($pageNum) or $pageNum <= 0) {
             $pageNum = 1;
         }
-        if (!is_numeric($resultsOnPageNum) or $resultsOnPageNum <= 0 or $resultsOnPageNum > $this->maxResultsOnPage) {
-            $resultsOnPageNum = $this->defaultResultsOnPage;
+        if (!is_numeric($resultsOnPageNum) or $resultsOnPageNum <= 0 or $resultsOnPageNum > self::MAX_RES_ON_PAGE) {
+            $resultsOnPageNum = self::DEFAULT_RES_ON_PAGE;
         }
-
-        if (($pageNum - 1) * $resultsOnPageNum > $repository->count([])) {
+        $itemCount = $itemService->getItemCount();
+        if (($pageNum - 1) * $resultsOnPageNum > $itemCount) {
             $pageNum = 1;
         }
 
-        $orderCriteria = $this->getOrderCriteria($orderBy);
+        $nextPageExists = ($pageNum * $resultsOnPageNum) < $itemCount;
 
-        $nextPageExists = false;
-        $items = $repository->findBy(
-            [],
-            $orderCriteria,
-            $resultsOnPageNum + 1,
-            ($pageNum - 1) * $resultsOnPageNum
-        );
-        if (array_key_exists($resultsOnPageNum, $items)) {
-            unset($items[$resultsOnPageNum]);
-            $nextPageExists = true;
-        }
-
-        $itemsData = [];
-        foreach ($items as $item) {
-            foreach ($serializer->normalize($item) as $itemField => $itemFieldValue) {
-                if (in_array($itemField, $this->responseFields)) {
-                    $itemsData[$item->getId()][$itemField] = $itemFieldValue;
-                }
-            }
-        }
+        $itemsData = $itemService->getItemsData($pageNum, $resultsOnPageNum, $orderBy, $optionalFields);
 
         return $this->json(
             [
@@ -76,32 +54,5 @@ class ItemsController extends AbstractController
                 'items' => $itemsData,
             ]
         );
-    }
-
-    public function getOrderCriteria(string $orderBy): array
-    {
-        $orderCriteria = [];
-        $orderBy = str_replace(['asc_', 'asc(', 'ASC_', 'ASC('], '+', $orderBy);
-        $orderBy = str_replace(['desc_', 'desc(', 'DESC_', 'DESC('], '-', $orderBy);
-        while ((false !== strpos($orderBy, '+')) or (false !== strpos($orderBy, '-'))) {
-            $posA = strpos($orderBy, '+');
-            $posD = strpos($orderBy, '-');
-            $pos = ((false !== $posA) and (false !== $posD))
-                ? (($posD < $posA) ? $posD : $posA)
-                : ((false !== $posD) ? $posD : $posA);
-            $ascDesc = substr($orderBy, $pos, 1);
-            $orderBy = substr($orderBy, $pos + 1);
-            foreach ($this->orderlyFields as $field) {
-                if (substr($orderBy, 0, strlen($field)) == $field) {
-                    $orderCriteria[$field] = ('+' === $ascDesc) ? 'asc' : 'desc';
-                }
-            }
-        }
-
-        if (empty($orderCriteria) and ($orderBy !== $this->defaultOrder)) {
-            $orderCriteria = $this->getOrderCriteria($this->defaultOrder);
-        }
-
-        return $orderCriteria;
     }
 }
