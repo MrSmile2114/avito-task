@@ -2,6 +2,9 @@ preset: symfony
 disabled:
   - braces
   - property_separation
+  - blank_line_after_namespace
+  - blank_line_after_opening_tag
+  - const_separation
 finder:
   exclude:
     - "nginx"
