@@ -43,8 +43,8 @@ class EntityItemService extends AbstractEntityService implements ItemServiceInte
         );
     }
 
-    public function getItemCount(array $criteria = null): int
+    public function getItemsCount(array $criteria = null): int
     {
-        return $this->getEntityCount($criteria);
+        return $this->count($criteria);
     }
 }

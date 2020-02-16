@@ -126,7 +126,7 @@ abstract class AbstractEntityService
         return $itemData;
     }
 
-    public function getEntityCount($criteria = null): int
+    public function count($criteria = null): int
     {
         $criteria = $criteria ?? [];
 

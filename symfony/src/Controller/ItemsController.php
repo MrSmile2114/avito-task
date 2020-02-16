@@ -36,12 +36,12 @@ class ItemsController extends AbstractController
         if (!is_numeric($resultsOnPageNum) or $resultsOnPageNum <= 0 or $resultsOnPageNum > self::MAX_RES_ON_PAGE) {
             $resultsOnPageNum = self::DEFAULT_RES_ON_PAGE;
         }
-        $itemCount = $itemService->getItemCount();
-        if (($pageNum - 1) * $resultsOnPageNum > $itemCount) {
+        $itemsCount = $itemService->getItemsCount();
+        if (($pageNum - 1) * $resultsOnPageNum >= $itemsCount) {
             $pageNum = 1;
         }
 
-        $nextPageExists = ($pageNum * $resultsOnPageNum) < $itemCount;
+        $nextPageExists = ($pageNum * $resultsOnPageNum) < $itemsCount;
 
         $itemsData = $itemService->getItemsData($pageNum, $resultsOnPageNum, $orderBy, $optionalFields);
 
